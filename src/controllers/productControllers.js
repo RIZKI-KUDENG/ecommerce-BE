@@ -7,30 +7,58 @@ import {
 
 export const getAllproducts = async (req, res) => {
   try {
-    const data = await Products.findAll({
+    const { category, search, sortBy, order, page, limit } = req.query;
+    const where = {};
+    if (category) where.category_id = category;
+    if (search) where.name = { [Op.iLike]: `%${search}%` };
+    const sortColumn = sortBy || "id";
+    const sortOrder = order?.toUpperCase() === "DESC" ? "DESC" : "ASC";
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 10;
+    const offset = (pageNum - 1) * limitNum;
+
+    const data = await Products.findAndCountAll({
+      where,
       include: [
-        {model: Categories, as: "category", attributes: ["id", "name"]},
-        {model: ProductVariant, as: "productVariants", include: [{model: StockProduct, as: "stockProducts"}]},
-      ]
+        { model: Categories, as: "category", attributes: ["id", "name"] },
+        {
+          model: ProductVariant,
+          as: "productVariants",
+          include: [{ model: StockProduct, as: "stockProducts" }],
+        },
+        {model : StockProduct, as: "stockProducts"},
+      ],
+      order: [[sortColumn, sortOrder]],
+      limit: limitNum,
+      offset: offset,
     });
-    res.status(200).json({message: "success", data: data})
+    res.status(200).json({ message: "success", 
+      currentPage: pageNum,
+      totalPages: Math.ceil(total / limitNum),
+      totalProducts: total,
+      data: products,
+    })
   } catch (error) {
-    res.status(500).json({message: "Internal Server Error", error: error.message})
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
 
 export const createProduct = async (req, res) => {
   try {
-    const { name, description , basePrice, image, categoryId} = req.body;
+    const { name, description, basePrice, image, categoryId } = req.body;
     const newProduct = await Products.create({
       name,
       description,
       base_price: basePrice,
       image,
-      category_id: categoryId
-    })
-    res.status(201).json({message: "success", data: newProduct})
-  }catch(err){
-    res.status(500).json({message: "Internal Server Error", error: err.message})
+      category_id: categoryId,
+    });
+    res.status(201).json({ message: "success", data: newProduct });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: err.message });
   }
-}
+};
