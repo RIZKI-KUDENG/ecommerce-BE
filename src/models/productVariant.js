@@ -1,51 +1,39 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../utils/db.js";
 
-const Products = sequelize.define("products", {
+const ProductVariant = sequelize.define("productVariant", {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    category_id: {
+    product_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: "categories",
+            model: "products",
             key: "id"
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE"
     },
-    name: {
+    variant_name:{
         type: DataTypes.STRING,
         allowNull: false
     },
-    description: {
-        type: DataTypes.TEXT,
-        allowNull: false
-    },
-    brand: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    base_price: {
-        type: DataTypes.DECIMAL(12, 2),
-        allowNull: false
-    },
-    image: {
-        type: DataTypes.STRING,
+    additional_price: {
+        type: DataTypes.INTEGER,
         allowNull: false
     },
     created_at: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: false,
+        defaultValue: DataTypes.NOW
     }
 },
 {
-    tableName: "products",
-    timestamps: false
+    tableName: "productVariant",
+    timestamps: false,
+    underscored: true
 })
-
-
-export default Products;
+export default ProductVariant;
