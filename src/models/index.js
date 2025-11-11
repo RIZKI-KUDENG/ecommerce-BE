@@ -65,4 +65,39 @@ Wishlist.belongsTo(User, {
   foreignKey: "user_id",
   as: "user",
 });
+Carts.belongsTo(Products, {
+  foreignKey: "product_id",
+  as: "products" // Samakan 'as' dengan di controller Anda
+});
+
+// Carts => ProductVariant (N:1)
+Carts.belongsTo(ProductVariant, {
+  foreignKey: "variant_id",
+  as: "productVariants" // Samakan 'as' dengan di controller Anda
+});
+
+// Carts => StockProduct (N:1)
+Carts.belongsTo(StockProduct, {
+  foreignKey: "stock_id",
+  as: "stockProducts" // Samakan 'as' dengan di controller Anda
+});
+
+// Lakukan hal yang sama untuk Wishlist
+// Wishlist => Products (N:1)
+Wishlist.belongsTo(Products, {
+  foreignKey: "product_id",
+  as: "products"
+});
+
+// Wishlist => ProductVariant (N:1)
+Wishlist.belongsTo(ProductVariant, {
+  foreignKey: "variant_id",
+  as: "productVariants"
+});
+
+// Wishlist => StockProduct (N:1)
+Wishlist.belongsTo(StockProduct, {
+  foreignKey: "stock_id",
+  as: "stockProducts"
+});
 export { sequelize,Categories, Products, User, ProductVariant, StockProduct, Carts, Wishlist };

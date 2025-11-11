@@ -1,4 +1,4 @@
-import jwt, { decode } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
   try {
@@ -14,10 +14,17 @@ export const verifyToken = (req, res, next) => {
       if (err) {
         return res.status(403).json({ message: "invalid token" });
       }
-      req.user = decode;
+      req.user = user;
       next();
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+};
+
+export const verifyAdmin = (req, res, next) => {
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+  next();
 };
