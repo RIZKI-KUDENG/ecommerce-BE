@@ -1,5 +1,5 @@
 import express from "express";
-import { wishlist, addWishlist } from "../controllers/wishlistControllers";
+import { wishlist, addWishlist } from "../controllers/wishlistControllers.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
 
 const wishlistRoute = express.Router();

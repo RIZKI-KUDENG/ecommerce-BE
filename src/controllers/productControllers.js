@@ -4,6 +4,7 @@ import {
   ProductVariant,
   StockProduct,
 } from "../models/index.js";
+import { Op } from "sequelize";
 
 export const getAllproducts = async (req, res) => {
   try {
@@ -17,7 +18,7 @@ export const getAllproducts = async (req, res) => {
     const limitNum = parseInt(limit) || 10;
     const offset = (pageNum - 1) * limitNum;
 
-    const data = await Products.findAndCountAll({
+    const { rows: data, count: total } = await Products.findAndCountAll({
       where,
       include: [
         { model: Categories, as: "category", attributes: ["id", "name"] },
@@ -31,12 +32,13 @@ export const getAllproducts = async (req, res) => {
       order: [[sortColumn, sortOrder]],
       limit: limitNum,
       offset: offset,
+      distinct: true
     });
     res.status(200).json({ message: "success", 
       currentPage: pageNum,
       totalPages: Math.ceil(total / limitNum),
       totalProducts: total,
-      data: products,
+      data: data,
     })
   } catch (error) {
     res
