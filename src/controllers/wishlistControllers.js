@@ -8,9 +8,9 @@ export const wishlist = async (req, res) => {
         user_id,
       },
       include: [
-        { model: Products, as: "product" },
-        { model: ProductVariant, as: "variant" },
-        { model: StockProduct, as: "stock" },
+        { model: Products, as: "products" },
+        { model: ProductVariant, as: "productVariants" },
+        { model: StockProduct, as: "stockProducts" },
       ],
     });
     res.status(200).json({ message: "success", data: cart });

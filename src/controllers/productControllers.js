@@ -10,8 +10,7 @@ export const getAllproducts = async (req, res) => {
     const data = await Products.findAll({
       include: [
         {model: Categories, as: "category", attributes: ["id", "name"]},
-        {model: ProductVariant, as: "variants", include: [{model: StockProduct, as: "stock"}]},
-        {model: StockProduct, as: "stocks"}
+        {model: ProductVariant, as: "productVariants", include: [{model: StockProduct, as: "stockProducts"}]},
       ]
     });
     res.status(200).json({message: "success", data: data})

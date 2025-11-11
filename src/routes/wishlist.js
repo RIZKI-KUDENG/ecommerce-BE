@@ -1,9 +1,10 @@
 import express from "express";
-import { getWishlistByUser, addToWishlist } from "../controllers/wishlistControllers.js";
+import { wishlist, addWishlist } from "../controllers/wishlistControllers";
+import { verifyToken } from "../middleware/authMiddleware.js";
 
 const wishlistRoute = express.Router();
 
-wishlistRoute.get("/:user_id", getWishlistByUser);
-wishlistRoute.post("/", addToWishlist);
+wishlistRoute.get("/:user_id",verifyToken, wishlist);
+wishlistRoute.post("/",verifyToken, addWishlist);
 
 export default wishlistRoute;

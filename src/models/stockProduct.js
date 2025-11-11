@@ -41,7 +41,7 @@ const StockProduct = sequelize.define(
       type: DataTypes.DECIMAL,
       allowNull: false,
     },
-    Image: {
+    image: {
       type: DataTypes.STRING,
       allowNull: false,
     },
