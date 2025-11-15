@@ -49,12 +49,13 @@ export const getAllproducts = async (req, res) => {
 
 export const createProduct = async (req, res) => {
   try {
-    const { name, description, basePrice, image, categoryId } = req.body;
+    const { name, description, basePrice, image,brand, categoryId } = req.body;
     const newProduct = await Products.create({
       name,
       description,
       base_price: basePrice,
       image,
+      brand,
       category_id: categoryId,
     });
     res.status(201).json({ message: "success", data: newProduct });

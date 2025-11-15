@@ -14,3 +14,17 @@ export const createVariant = async (req, res)=> {
         res.status(500).json({ message: "Internal Server Error", error: err.message });
     }
 }
+export const getVariantById = async (req, res) => {
+    try{
+        const {id} = req.params;
+        const variant = await ProductVariant.findAll({
+            where: {
+                product_id: id
+            }
+        });
+        res.status(200).json({message: "success", data: variant})
+    }catch(err){
+        console.error(err);
+        res.status(500).json({ message: "Internal Server Error", error: err.message });
+    }
+}

@@ -56,10 +56,6 @@ const Wishlist = sequelize.define("wishlist", {
         type: DataTypes.DECIMAL,
         allowNull: false
     },
-    created_at: {
-        type: DataTypes.DATE,
-        allowNull: false
-    }
 }, {
     tableName: "wishlist",
     timestamps: false

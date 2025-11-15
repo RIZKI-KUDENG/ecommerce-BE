@@ -25,11 +25,6 @@ const ProductVariant = sequelize.define("productVariant", {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    created_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW
-    }
 },
 {
     tableName: "productVariant",
