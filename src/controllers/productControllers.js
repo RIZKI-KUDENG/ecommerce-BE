@@ -27,19 +27,22 @@ export const getAllproducts = async (req, res) => {
           as: "productVariants",
           include: [{ model: StockProduct, as: "stockProducts" }],
         },
-        {model : StockProduct, as: "stockProducts"},
+        { model: StockProduct, as: "stockProducts" },
       ],
       order: [[sortColumn, sortOrder]],
       limit: limitNum,
       offset: offset,
-      distinct: true
+      distinct: true,
     });
-    res.status(200).json({ message: "success", 
-      currentPage: pageNum,
-      totalPages: Math.ceil(total / limitNum),
-      totalProducts: total,
-      data: data,
-    })
+    res
+      .status(200)
+      .json({
+        message: "success",
+        currentPage: pageNum,
+        totalPages: Math.ceil(total / limitNum),
+        totalProducts: total,
+        data: data,
+      });
   } catch (error) {
     res
       .status(500)
@@ -49,7 +52,7 @@ export const getAllproducts = async (req, res) => {
 
 export const createProduct = async (req, res) => {
   try {
-    const { name, description, basePrice, image,brand, categoryId } = req.body;
+    const { name, description, basePrice, image, brand, categoryId } = req.body;
     const newProduct = await Products.create({
       name,
       description,
@@ -60,6 +63,30 @@ export const createProduct = async (req, res) => {
     });
     res.status(201).json({ message: "success", data: newProduct });
   } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: err.message });
+  }
+};
+
+export const getProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Products.findOne({
+      where: { id },
+      include: [
+        { model: Categories, as: "category", attributes: ["id", "name"] },
+        {
+          model: ProductVariant,
+          as: "productVariants",
+          include: [{ model: StockProduct, as: "stockProducts" }],
+        },
+      ],
+    });
+    if (!product) return res.status(404).json({ message: "Product not found" });
+    res.status(200).json({ message: "success", data: product });
+  } catch (err) {
+    console.error(err);
     res
       .status(500)
       .json({ message: "Internal Server Error", error: err.message });
